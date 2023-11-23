@@ -29,7 +29,7 @@ function operation() {
         createAccount();
       }
       if (action === "Consultar Saldo") {
-        
+          getAccountBalance()
       }
       if (action === "Depositar") {
         deposit();
@@ -125,7 +125,7 @@ function addAmount(accountName, amount) {
     );
     return deposit();
   }
-  console.log(accountData)
+  console.log(accountData);
 
   accountData.balance = parseFloat(amount) + parseFloat(accountData.balance);
 
@@ -137,14 +137,14 @@ function addAmount(accountName, amount) {
     }
   );
 
-
-
-    console.log(chalk.green(`Foi adicionado o valor de R$${amount}, na sua conta`))
+  console.log(
+    chalk.green(`Foi adicionado o valor de R$${amount}, na sua conta`)
+  );
   const accountData2 = getAccount(accountName);
 
-console.log(accountData2)
+  console.log(accountData2);
 
-    operation()
+  operation();
 }
 
 function getAccount(accountName) {
@@ -165,4 +165,31 @@ function checkAccount(accountName) {
   } else {
     return true;
   }
+}
+
+//Mostrar saldo
+function getAccountBalance(){
+  inquirer.prompt([
+    {
+      name: 'accountName',
+      message: 'Qual o nome da sua conta?'
+    }
+  ]).then((answer)=> {
+    const accountName = answer["accountName"]
+
+    if(!checkAccount(accountName)){
+      return getAccountBalance()
+    }
+
+    const accountData = getAccount(accountName)
+
+    console.log(
+      chalk.bgBlue.black(
+        `Olá, o saldo da sua conta é ${accountData.balance}`
+      )
+    )
+
+    operation()
+
+  }).catch((err)=> console.log(err))
 }
